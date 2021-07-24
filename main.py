@@ -1,8 +1,18 @@
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
-import random
+import random,os
 from tkinter import messagebox
+import tempfile
+from time import strftime
+import pymysql
+
+mypass = "admin"
+mydatabase="RetroRecords"
+myusr = "admin"
+
+con = pymysql.connect(host="localhost",user=myusr,password=mypass,database=mydatabase)
+cur = con.cursor()
 
 
 class Bill_App:
@@ -118,6 +128,17 @@ class Bill_App:
         lbl_title = Label(self.root, text="BILLING SOFTWARE USING PYTHON", font=("times new roman", 35, "bold"), bg="white", fg="red")
         lbl_title.place(x=0, y=130, width=1530, height=45)
 
+        
+
+        def time():
+            string = strftime('%H:%M:%S %p')
+            lbl.config(text = string)
+            lbl.after(1000, time)
+
+        lbl = Label(lbl_title,font=('times new roman',16,'bold'),background= 'white',foreground = "blue")
+        lbl.place(x=0,y=0,width=120,height=45)
+        time()
+
         Main_Frame = Frame(self.root, bd=5, relief=GROOVE, bg="white")
         Main_Frame.place(x=0, y=175, width=1530, height=620)
 
@@ -216,7 +237,7 @@ class Bill_App:
         self.txt_Search_Entry = ttk.Entry(Search_Frame, textvariable=self.search_bill, font=('arial', 10, 'bold'), width=26)
         self.txt_Search_Entry.grid(row=0, column=1, sticky=W, padx=2)
 
-        self.BtnSearch = Button(Search_Frame, text="Search", font=('arial', 10, 'bold'), bg="orangered", fg="white", width=12, cursor="hand2")
+        self.BtnSearch = Button(Search_Frame,command=self.find_bill, text="Search", font=('arial', 10, 'bold'), bg="orangered", fg="white", width=12, cursor="hand2")
         self.BtnSearch.grid(row=0, column=2)
 
         #  RIGHT FRAME Bill Area
@@ -261,48 +282,23 @@ class Bill_App:
         self.BtnGenerate_Bill = Button(Btn_Frame, command=self.gen_bill, height=2, text="Generate Bill", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
         self.BtnGenerate_Bill.grid(row=0, column=1)
 
-        self.BtnSave = Button(Btn_Frame, height=2, text="Save Bill", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnSave = Button(Btn_Frame,command=self.save_bill, height=2, text="Save Bill", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
         self.BtnSave.grid(row=0, column=2)
 
-        self.BtnPrint = Button(Btn_Frame, height=2, text="Print", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnPrint = Button(Btn_Frame,command=self.iprint, height=2, text="Print", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
         self.BtnPrint.grid(row=0, column=3)
 
-        self.BtnClear = Button(Btn_Frame, height=2, text="Clear", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnClear = Button(Btn_Frame,command=self.clear, height=2, text="Clear", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
         self.BtnClear.grid(row=0, column=4)
 
-        self.BtnExit = Button(Btn_Frame, height=2, text="Exit", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnExit = Button(Btn_Frame,command=self.root.destroy, height=2, text="Exit", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
         self.BtnExit.grid(row=0, column=5)
 
         self.welcome()
 
-    # =======================FUNCTION DECLARATION===========================================
-
-    def AddItem(self):
-        Tax = 1
-        self.n = self.prices.get()
-        self.m = self.qty.get() * self.n
         self.lst = []
-        self.lst.append(self.m)
 
-        if self.product.get() == "":
-            messagebox.showerror("Error", "Please Select The Product Name")
-        else:
-            self.textarea.insert(END, f"\n {self.product.get()}\t\t{self.qty.get()}\t\t{self.m}")
-            self.sub_total.set('Rs.%.2f' % (sum(self.lst)))
-            self.tax_input.set('Rs.%.2f' % ((((sum(self.lst)) - int(self.prices.get())) * Tax) / 100))
-            self.total.set("Rs.%.2f" % (((sum(self.lst)) + (((sum(self.lst)) - (self.prices.get() * Tax) / 100)))))
-
-    def gen_bill(self):
-        if self.product.get() == "":
-            messagebox.showerror("Error", "Please Select Add Product To The Cart")
-        else:
-            text = self.textarea.get(10.0, (10.0 + float(len(self.lst))))
-            self.welcome()
-            self.textarea.insert(END, "\n==================================================")
-            self.textarea.insert(END, f"\n Sub Amount : \t\t\t{self.sub_total.get()}")
-            self.textarea.insert(END, f"\n Tax Amount : \t\t\t{self.tax_input.get()}")
-            self.textarea.insert(END, f"\n Total Amount : \t\t\t{self.total.get()}")
-            self.textarea.insert(END, "\n==================================================")
+    # =======================FUNCTION DECLARATION===========================================
 
     def welcome(self):
         self.textarea.delete(1.0, END)
@@ -314,7 +310,91 @@ class Bill_App:
 
         self.textarea.insert(END, "\n==================================================")
         self.textarea.insert(END, f"\n PRODUCTS\t\t\tQTY\t\tPRICES")
-        self.textarea.insert(END, "\n==================================================")
+        self.textarea.insert(END, "\n==================================================\n")
+
+
+    def AddItem(self):
+        Tax = 1
+        self.n = self.prices.get()
+        self.m = self.qty.get() * self.n
+        self.lst.append(self.m)
+
+        if self.product.get() == "":
+            messagebox.showerror("Error", "Please Select The Product Name")
+        else:
+            print(((((sum(self.lst)) + (self.prices.get())) * Tax) / 100))
+            self.textarea.insert(END, f"\n {self.product.get()}\t\t{self.qty.get()}\t\t{self.m}")
+            self.sub_total.set('Rs.%.2f' % (sum(self.lst)))
+            self.tax_input.set('Rs.%.2f' % ((((sum(self.lst)) - (self.prices.get())) * Tax) / 100))
+            self.total.set("Rs.%.2f" % (((sum(self.lst)) + (((sum(self.lst)) - (self.prices.get() * Tax) / 100)))))
+
+    def gen_bill(self):
+        if self.product.get() == "":
+            messagebox.showerror("Error", "Please Select Add Product To The Cart")
+        else:
+            text = self.textarea.get(10.0, (10.0 + float(len(self.lst))))
+            self.welcome()
+            self.textarea.insert(END,text)
+            self.textarea.insert(END, "\n ==================================================")
+            self.textarea.insert(END, f"\n Sub Amount : \t\t\t{self.sub_total.get()}")
+            self.textarea.insert(END, f"\n Tax Amount : \t\t\t{self.tax_input.get()}")
+            self.textarea.insert(END, f"\n Total Amount : \t\t\t{self.total.get()}")
+            self.textarea.insert(END, "\n==================================================")
+            self.Entry_Qty.insert(END, f"{self.sub_total.get()}")
+            self.txt_tax.insert(END, f"{self.tax_input.get()}")
+            self.txtAmountTotal.insert(END, f"{self.total.get()}")
+
+
+    def save_bill(self):
+        op = messagebox.askyesno("Save Bill","Do you want to save the Bill")
+        if op > 0:
+            self.bill_data=self.textarea.get(1.0,END)
+            f1 = open('bills/'+str(self.bill_no.get())+".txt",'w')
+            f1.write(self.bill_data)
+            op = messagebox.showinfo("Saved",f"Bill No: {self.bill_no.get()} Saved Successfully")
+            f1.close()
+
+    
+    def iprint(self):
+        q=self.textarea.get(1.0,"end-1c")
+        filename=tempfile.mktemp('.txt')
+        open(filename,'w').write(q)
+        os.startfile(filename,"print")
+
+
+    def find_bill(self):
+        found="no"
+        for i in os.listdir("bills/"):
+            if i.split('.')[0] == self.search_bill.get():
+                f1 = open(f'bills/{i}','r')
+                self.textarea.delete(1.0,END)
+                for d in f1:
+                    self.textarea.insert(END,d)
+                f1.close()
+                found="yes"
+
+        if found == "no":
+            messagebox.showerror("Error","Invalid Bill No.")
+
+
+    def clear(self):
+        self.textarea.delete(1.0, END)
+        self.c_name.set("")
+        self.c_phon.set("")
+        self.c_email.set("")
+        x=random.randint(1000,9999)
+        self.bill_no.set(str(x))
+        self.search_bill.set("")
+        self.product.set("")
+        self.prices.set(0)
+        self.qty.set(0)
+        self.lst=[]
+        self.total.set("")
+        self.sub_total.set("")
+        self.tax_input.set('')
+        self.welcome()
+        
+
 
     def Categories(self, event=""):
         if self.Combo_Category.get() == "Clothing":
