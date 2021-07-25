@@ -7,13 +7,12 @@ import tempfile
 from time import strftime
 import pymysql
 
-mypass = "admin"
-mydatabase="RetroRecords"
-myusr = "admin"
+mypass = "pass"
+mydatabase="Billing"
+myusr = "user"
 
 con = pymysql.connect(host="localhost",user=myusr,password=mypass,database=mydatabase)
 cur = con.cursor()
-
 
 class Bill_App:
     def __init__(self, root):
@@ -343,6 +342,9 @@ class Bill_App:
             self.Entry_Qty.insert(END, f"{self.sub_total.get()}")
             self.txt_tax.insert(END, f"{self.tax_input.get()}")
             self.txtAmountTotal.insert(END, f"{self.total.get()}")
+
+            cur.execute( f"""INSERT INTO USERS(Name,Num,Email,Total) VALUES('{self.txtCustName.get()}','{self.entry_mob.get()}','{self.txtEmail.get()}','{self.total.get()}')""")
+            con.commit()
 
 
     def save_bill(self):
