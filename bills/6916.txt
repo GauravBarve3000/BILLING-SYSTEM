@@ -1,0 +1,15 @@
+			Welcome TO D-Mart
+ BILL NUMBER : 6916
+ CUSTOMER NAME : 
+ PHONE NUMBER : 
+ CUSTOMER EMAIL : 
+==================================================
+ PRODUCTS			QTY		PRICES
+==================================================
+ Lux		1		20
+
+ ==================================================
+ Sub Amount : 			Rs.20.00
+ Tax Amount : 			Rs.0.00
+ Total Amount : 			Rs.39.80
+==================================================

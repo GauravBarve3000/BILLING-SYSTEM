@@ -16,8 +16,20 @@ cur = con.cursor()
 
 class Bill_App:
     def __init__(self, root):
+        size=[1530,800]
+
         self.root = root
-        self.root.geometry("1530x800+0+0")
+        sw = root.winfo_screenwidth()
+        sh = root.winfo_screenheight()
+
+        x = int((sw/2) - (size[0]/2))
+        y = int((sh/2) - (size[1]/2))
+
+        root.geometry(f'{size[0]}x{size[1]}+{x}+{y}')
+
+        root.minsize(width=400,height=400)
+        root.resizable(True , True)
+        # self.root.geometry("1530x800+0+0")
         self.root.title("Billing Software")
 
         #  ======================VARIABLES===============================
@@ -101,7 +113,7 @@ class Bill_App:
         self.price_one_8t = 45800
 
         #  Image 1
-        img = Image.open("image/b1.jpg")
+        img = Image.open("image/couple.jpg")
         img = img.resize((500, 130), Image.ANTIALIAS)
         self.photoimg = ImageTk.PhotoImage(img)
 
@@ -109,7 +121,7 @@ class Bill_App:
         lbl_img.place(x=0, y=0, width=500, height=130)
 
         #  Image 2
-        img_1 = Image.open("image/girls.jpg")
+        img_1 = Image.open("image/pineapple.jpg")
         img_1 = img_1.resize((500, 130), Image.ANTIALIAS)
         self.photoimg_1 = ImageTk.PhotoImage(img_1)
 
@@ -117,14 +129,14 @@ class Bill_App:
         lbl_img_1.place(x=500, y=0, width=500, height=130)
 
         #  Image 3
-        img_2 = Image.open("image/girl1.jpg")
+        img_2 = Image.open("image/contact.jpg")
         img_2 = img_2.resize((520, 130), Image.ANTIALIAS)
         self.photoimg_2 = ImageTk.PhotoImage(img_2)
 
         lbl_img_2 = Label(self.root, image=self.photoimg_2)
         lbl_img_2.place(x=1000, y=0, width=520, height=130)
 
-        lbl_title = Label(self.root, text="BILLING SOFTWARE USING PYTHON", font=("times new roman", 35, "bold"), bg="white", fg="red")
+        lbl_title = Label(self.root, text="BILLING SOFTWARE USING PYTHON", font=("times new roman", 35, "bold"), bg="white", fg="blue violet")
         lbl_title.place(x=0, y=130, width=1530, height=45)
 
         
@@ -211,7 +223,7 @@ class Bill_App:
         MiddleFrame.place(x=10, y=150, width=980, height=340)
 
         #  Middle Image 1
-        mid_img = Image.open("image/good.jpg")
+        mid_img = Image.open("image/potato.jpg")
         mid_img = mid_img.resize((490, 340), Image.ANTIALIAS)
         self.photomid_img = ImageTk.PhotoImage(mid_img)
 
@@ -219,8 +231,8 @@ class Bill_App:
         lbl_mid_img.place(x=0, y=0, width=490, height=340)
 
         #  Middle Image 2
-        mid_img_1 = Image.open("image/mall.jpg")
-        mid_img_1 = img_1.resize((490, 340), Image.ANTIALIAS)
+        mid_img_1 = Image.open("image/pixels.jpg")
+        mid_img_1 = mid_img_1.resize((490, 340), Image.ANTIALIAS)
         self.photomid_img_1 = ImageTk.PhotoImage(mid_img_1)
 
         lbl_mid_img_1 = Label(MiddleFrame, image=self.photomid_img_1)
@@ -230,13 +242,13 @@ class Bill_App:
         Search_Frame = Frame(Main_Frame, bd=2, bg="white")
         Search_Frame.place(x=1020, y=15, width=500, height=40)
 
-        self.lblBill = Label(Search_Frame, font=('arial', 12, 'bold'), fg="white", bg="red", text="Bill Number")
+        self.lblBill = Label(Search_Frame, font=('arial', 12, 'bold'), fg="white", bg="maroon1", text="Bill Number")
         self.lblBill.grid(row=0, column=0, sticky=W, padx=1)
 
         self.txt_Search_Entry = ttk.Entry(Search_Frame, textvariable=self.search_bill, font=('arial', 10, 'bold'), width=26)
         self.txt_Search_Entry.grid(row=0, column=1, sticky=W, padx=2)
 
-        self.BtnSearch = Button(Search_Frame,command=self.find_bill, text="Search", font=('arial', 10, 'bold'), bg="orangered", fg="white", width=12, cursor="hand2")
+        self.BtnSearch = Button(Search_Frame,command=self.find_bill, text="Search", font=('arial', 10, 'bold'), bg="magenta4", fg="white", width=12, cursor="hand2")
         self.BtnSearch.grid(row=0, column=2)
 
         #  RIGHT FRAME Bill Area
@@ -275,22 +287,22 @@ class Bill_App:
         Btn_Frame = Frame(Bottom_Frame, bd=2, bg="white")
         Btn_Frame.place(x=320, y=0)
 
-        self.BtnAddToCart = Button(Btn_Frame, command=self.AddItem, height=2, text="Add To Cart", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnAddToCart = Button(Btn_Frame, command=self.AddItem, height=2, text="Add To Cart", font=('arial', 15, 'bold'), bg="orange", fg="white", width=15, cursor="hand2")
         self.BtnAddToCart.grid(row=0, column=0)
 
-        self.BtnGenerate_Bill = Button(Btn_Frame, command=self.gen_bill, height=2, text="Generate Bill", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnGenerate_Bill = Button(Btn_Frame, command=self.gen_bill, height=2, text="Generate Bill", font=('arial', 15, 'bold'), bg="deep pink", fg="white", width=15, cursor="hand2")
         self.BtnGenerate_Bill.grid(row=0, column=1)
 
-        self.BtnSave = Button(Btn_Frame,command=self.save_bill, height=2, text="Save Bill", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnSave = Button(Btn_Frame,command=self.save_bill, height=2, text="Save Bill", font=('arial', 15, 'bold'), bg="spring green", fg="white", width=15, cursor="hand2")
         self.BtnSave.grid(row=0, column=2)
 
-        self.BtnPrint = Button(Btn_Frame,command=self.iprint, height=2, text="Print", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnPrint = Button(Btn_Frame,command=self.iprint, height=2, text="Print", font=('arial', 15, 'bold'), bg="deep sky blue", fg="white", width=15, cursor="hand2")
         self.BtnPrint.grid(row=0, column=3)
 
-        self.BtnClear = Button(Btn_Frame,command=self.clear, height=2, text="Clear", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnClear = Button(Btn_Frame,command=self.clear, height=2, text="Clear", font=('arial', 15, 'bold'), bg="dark orchid", fg="white", width=15, cursor="hand2")
         self.BtnClear.grid(row=0, column=4)
 
-        self.BtnExit = Button(Btn_Frame,command=self.root.destroy, height=2, text="Exit", font=('arial', 15, 'bold'), bg="orangered", fg="white", width=15, cursor="hand2")
+        self.BtnExit = Button(Btn_Frame,command=self.root.destroy, height=2, text="Exit", font=('arial', 15, 'bold'), bg="Chartreuse", fg="white", width=15, cursor="hand2")
         self.BtnExit.grid(row=0, column=5)
 
         self.welcome()
@@ -313,7 +325,7 @@ class Bill_App:
 
 
     def AddItem(self):
-        Tax = 1
+        Tax = 0.15
         self.n = self.prices.get()
         self.m = self.qty.get() * self.n
         self.lst.append(self.m)
@@ -321,16 +333,22 @@ class Bill_App:
         if self.product.get() == "":
             messagebox.showerror("Error", "Please Select The Product Name")
         else:
-            print(((((sum(self.lst)) + (self.prices.get())) * Tax) / 100))
-            self.textarea.insert(END, f"\n {self.product.get()}\t\t{self.qty.get()}\t\t{self.m}")
+            # print(((((sum(self.lst)) + (self.prices.get())) * Tax) / 100))
+            self.textarea.insert(END, f"\n {self.product.get()}\t\t\t{self.qty.get()}\t\t{self.m}")
             self.sub_total.set('Rs.%.2f' % (sum(self.lst)))
-            self.tax_input.set('Rs.%.2f' % ((((sum(self.lst)) - (self.prices.get())) * Tax) / 100))
-            self.total.set("Rs.%.2f" % (((sum(self.lst)) + (((sum(self.lst)) - (self.prices.get() * Tax) / 100)))))
+            
+            self.tax_input.set('Rs.%.2f' % (sum(self.lst)*Tax))
+            tax_amt = sum(self.lst)*Tax
+            # self.tax_input.set('Rs.%.2f' % ((((sum(self.lst)) - (self.prices.get())) * Tax) / 100))
+            self.total.set("Rs.%.2f" % (((sum(self.lst)) + tax_amt)))
 
     def gen_bill(self):
         if self.product.get() == "":
             messagebox.showerror("Error", "Please Select Add Product To The Cart")
         else:
+            self.Entry_Qty.delete(0, END)
+            self.txt_tax.delete(0, END)
+            self.txtAmountTotal.delete(0, END)
             text = self.textarea.get(10.0, (10.0 + float(len(self.lst))))
             self.welcome()
             self.textarea.insert(END,text)
@@ -360,8 +378,10 @@ class Bill_App:
     def iprint(self):
         q=self.textarea.get(1.0,"end-1c")
         filename=tempfile.mktemp('.txt')
-        open(filename,'w').write(q)
-        os.startfile(filename,"print")
+        with open(filename, mode="w+") as f:
+            f.write(q)
+        # print(filename)
+        os.system(f"gedit {filename}")
 
 
     def find_bill(self):
@@ -379,6 +399,8 @@ class Bill_App:
             messagebox.showerror("Error","Invalid Bill No.")
 
 
+   
+  
     def clear(self):
         self.textarea.delete(1.0, END)
         self.c_name.set("")
@@ -394,6 +416,9 @@ class Bill_App:
         self.total.set("")
         self.sub_total.set("")
         self.tax_input.set('')
+        self.Entry_Qty.delete(0, END)
+        self.txt_tax.delete(0, END)
+        self.txtAmountTotal.delete(0, END)
         self.welcome()
         
 

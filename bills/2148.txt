@@ -1,0 +1,17 @@
+			Welcome TO D-Mart
+ BILL NUMBER : 2148
+ CUSTOMER NAME : Atharva Chavan
+ PHONE NUMBER : 977373626
+ CUSTOMER EMAIL : atharvagc@gmail.com
+==================================================
+ PRODUCTS			QTY		PRICES
+==================================================
+ Jack&Jones		1		1700
+ Parachute		1		25
+ OnePlus 9		1		45000
+
+ ==================================================
+ Sub Amount : 			Rs.46725.00
+ Tax Amount : 			Rs.17.25
+ Total Amount : 			Rs.93000.00
+==================================================
